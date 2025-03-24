@@ -26,25 +26,16 @@ def getCoordinates():
                 break
 
 
+# Its easier to just make the program count the pixels from top to bottom for each division
+# I can aussi make the divisions a user's selection or a video from 0 divisions to full
+
+divisions = 20
+
 def ForEveryPixel():
-    for i in range(width):
-        for j in range(height):
-            if i != startedPoint[0] and j != startedPoint[1]:
-                continue
+    for i in range(startedPoint[0],width, divisions):
+        for j in range(startedPoint[1], height):
             imageGraph.putpixel((i,j), (0,255,0))
-            print(i,j)
 
-
-def testing():
-    for i in range(startedPoint[0], width, 31):
-        for j in range(height):
-            imageGraph.putpixel((i,j), (0,255,0))
-    
-    for j in range(startedPoint[1], height*10, 227):
-        for i in range(width):
-            imageGraph.putpixel((i, int((j)//10) ), (0,255,0))
-
-# ForEveryPixel()
+ForEveryPixel()
 # getCoordinates()
-testing()
 imageGraph.show()
