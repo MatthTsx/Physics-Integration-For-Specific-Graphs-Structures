@@ -6,32 +6,34 @@ import math
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph1"
-fileType = ".jpg"
+fileName = "Graph4"
 
-coords, zero, startingPoint = Data[fileName].values()
+fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions = Data[fileName].values()
 
 
 imageGraph = Image.open(root + "/ImagesBase/" + fileName + fileType)
 
-width, height = imageGraph.size
+iwidth, iheight = imageGraph.size
+divisions = maxDivisions
 
 
 def getCoordinates():
-    mult = 10
+    mult = 0
     for i in range (-mult,max(mult, 1)):
         for j in range(-mult, max(mult, 1)):
             imageGraph.putpixel((coords[0] + i, coords[1] + j), (0,255,255))
             imageGraph.putpixel((coords[2] + i, coords[3] + j), (0,255,255))
+            imageGraph.putpixel((coords[2] + i, zero + j), (0,255,255))
+            imageGraph.putpixel((coords[0] + i, startingPoint + j), (0,255,255))
     pass
 
 
 # Its easier to just make the program count the pixels from top to bottom for each division
 # I can aussi make the divisions a user's selection or a video from 0 divisions to full
 
-divisions = 200
+print(imageGraph.size)
 
-def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False):
+def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickness = -1, Debug = False, LinesThick = 4):
     ant_Ipoint = startingPoint
     ant_y = "undefined"
     
@@ -41,29 +43,35 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False):
         for j in range(coords[1], coords[3]):
             pixel = imageGraph.getpixel((i,j))
             
-            if pixel[2] > 195 and pixel[0] + pixel[1] < 300:
+            if (
+                abs(pixel[0] - targetColors["r"][0]) < targetColors["r"][1]
+                and abs(pixel[1] - targetColors["g"][0]) < targetColors["g"][1]
+                and abs(pixel[2] - targetColors["b"][0]) < targetColors["b"][1]
+            ):
                 y += j
                 count += 1
-                imageGraph.putpixel((i,j), (0,255,0))
+                if Debug:
+                    imageGraph.putpixel((i,j), (0,255,0))
         
         if not count:
             continue
         
-        imageGraph.putpixel(
-            (i, int(math.floor(y/count))),
-            (255,0,0)
-        )
+        if Debug:
+            imageGraph.putpixel(
+                (i, int(math.floor(y/count))),
+                (255,0,0)
+            )
         y = int(math.floor(y/count))
         
-        for j in range(1, abs(zero - y)):
-            imageGraph.putpixel((i-1,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
-            imageGraph.putpixel((i,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
-            imageGraph.putpixel((i+1,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
-            imageGraph.putpixel((i+2,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
-            imageGraph.putpixel((i-2,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
+        
+        if thickness >= 0:
+            for j in range(1, abs(zero - y)):
+                for k in range(-thickness, max(thickness, 1)):
+                    imageGraph.putpixel((i+k,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
+    
     
         y = zero - y
-        height = math.floor(abs(coords[0]-coords[2])/divisions)/(coords[2]-coords[0])*10
+        height = math.floor(abs(coords[0]-coords[2])/divisions)/(coords[2]-coords[0])*scale
         
         if ant_y == "undefined":
             ant_y = y
@@ -71,28 +79,32 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False):
         
         if derivate:
             ratio = (y-ant_y)/height
-            multiplyer = 1
-            for k in range(-5 * multiplyer,5 * multiplyer):
-                for l in range(-5 * multiplyer,5 * multiplyer):
-                    if(pow(k,2) + pow(l,2) > 10 * multiplyer): continue
-                    imageGraph.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), (0,255,0))
+            for k in range(-LinesThick*2, max(LinesThick*2, 1)):
+                for l in range(-LinesThick*2,max(LinesThick*2,1)):
+                    if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick*2)): continue
+                    print((i+k), int(math.floor(ant_Ipoint))+l)
+                    imageGraph.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), derivate)
         
-        if abs(ant_y)/ant_y != abs(y)/y:
+        if ant_y*y < 0:
             ant_y = 0
         
         if integrate:
             area = (ant_y+y)*height/2
             
             ant_Ipoint = ant_Ipoint + area *-1
-            for k in range(-5,5):
-                for l in range(-5,5):
-                    if(pow(k,2) + pow(l,2) > 10): continue
-                    imageGraph.putpixel((i+k, int(math.floor(ant_Ipoint))+l), (255,0,0))
+            print((ant_Ipoint))
+            for k in range(-LinesThick, max(LinesThick, 1)):
+                for l in range(-LinesThick,max(LinesThick,1)):
+                    if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick)): continue
+                    # imageGraph.putpixel((min(i+k, iwidth-1), min(int(math.floor(ant_Ipoint))+l, iheight-1)), integrate)
+                    imageGraph.putpixel((i+k, int(math.floor(ant_Ipoint))+l), integrate)
         
         ant_y = y
         
         
         
-# ForEveryPixelIntegrateOrDerivate(integrate=True, derivate=True)
+ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10)
 getCoordinates()
+
 imageGraph.show()
+#imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)
