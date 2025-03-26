@@ -15,7 +15,8 @@ Data = {
         "scale": 3,
         "integrate": (0,0,255),
         "derivate": False,
-        "maxDivisions": 600
+        "maxDivisions": 600,
+        "derivateTarget": 20
     },
     "Graph1 (2)":{
         "FileType": ".png",
@@ -30,11 +31,12 @@ Data = {
         "scale": 3,
         "integrate": (255,0,0),
         "derivate": False,
-        "maxDivisions": 350
+        "maxDivisions": 350,
+        "derivateTarget": 20
     },
     "Graph2": {
         "FileType": ".jpg",
-        "Points" :(163*2, 178*2, 2804, 1780-4),
+        "Points" :(163*2+3, 178*2, 2804, 1780-4),
         "MidCoord": 827,
         "StartingPoint": 178*2,
         "Colors": {
@@ -45,22 +47,24 @@ Data = {
         "scale": 10,
         "integrate": (255,0,0),
         "derivate": (0,0,0),
-        "maxDivisions": 600
+        "maxDivisions": 600,
+        "derivateTarget": 20
     },
     "Graph3": {
         "FileType": ".jpg",
-        "Points" :(163*2+30, 178*2, 2810, 1780-8),
+        "Points" :(163*2+63, 178*2, 2810, 1780-8),
         "MidCoord": 1300-6,
         "StartingPoint": 178*2,
         "Colors": {
-            "r": (255, 50),
+            "r": (255, 80),
             "g": (0, 50),
             "b": (0, 50)
         },
         "scale": 10,
         "integrate": False,
         "derivate": (0,0,255),
-        "maxDivisions": 400
+        "maxDivisions": 400,
+        "derivateTarget": 50
     },
     "Graph4": {
         "FileType": ".png",
@@ -75,7 +79,8 @@ Data = {
         "scale": 6,
         "integrate": (0,0,255),
         "derivate": False,
-        "maxDivisions": 1000
+        "maxDivisions": 1000,
+        "derivateTarget": 20
     },
     "Graph4 (2)": {
         "FileType": ".png",
@@ -90,6 +95,7 @@ Data = {
         "scale": 6,
         "integrate": (255,0,0),
         "derivate": False,
-        "maxDivisions": 1000
+        "maxDivisions": 1000,
+        "derivateTarget": 20
     },
 }
