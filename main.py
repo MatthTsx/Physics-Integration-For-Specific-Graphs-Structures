@@ -1,4 +1,4 @@
-from PIL import Image, ImageColor
+from PIL import Image
 import os
 from storedData import Data
 import math
@@ -6,10 +6,10 @@ import math
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "main1"
+fileName = "Graph1"
 fileType = ".jpg"
 
-coords, points, zero, startingPoint = Data["Graph2"].values()
+coords, zero, startingPoint = Data[fileName].values()
 
 
 imageGraph = Image.open(root + "/ImagesBase/" + fileName + fileType)
@@ -18,11 +18,12 @@ width, height = imageGraph.size
 
 
 def getCoordinates():
-    print(points)
-    for i in points:
-        imageGraph.putpixel((coords[0], i[1]), (0,255,0))
-        imageGraph.putpixel((coords[0]+1, i[1]), (0,255,0))
-        imageGraph.putpixel((coords[0]-1, i[1]), (0,255,0))
+    mult = 10
+    for i in range (-mult,max(mult, 1)):
+        for j in range(-mult, max(mult, 1)):
+            imageGraph.putpixel((coords[0] + i, coords[1] + j), (0,255,255))
+            imageGraph.putpixel((coords[2] + i, coords[3] + j), (0,255,255))
+    pass
 
 
 # Its easier to just make the program count the pixels from top to bottom for each division
@@ -70,9 +71,10 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False):
         
         if derivate:
             ratio = (y-ant_y)/height
-            for k in range(-5,5):
-                for l in range(-5,5):
-                    if(pow(k,2) + pow(l,2) > 10): continue
+            multiplyer = 1
+            for k in range(-5 * multiplyer,5 * multiplyer):
+                for l in range(-5 * multiplyer,5 * multiplyer):
+                    if(pow(k,2) + pow(l,2) > 10 * multiplyer): continue
                     imageGraph.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), (0,255,0))
         
         if abs(ant_y)/ant_y != abs(y)/y:
@@ -91,6 +93,6 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False):
         
         
         
-ForEveryPixelIntegrateOrDerivate(integrate=True, derivate=True)
-# getCoordinates()
+# ForEveryPixelIntegrateOrDerivate(integrate=True, derivate=True)
+getCoordinates()
 imageGraph.show()
