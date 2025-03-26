@@ -77,18 +77,18 @@ Data = {
         "derivate": False,
         "maxDivisions": 1000
     },
-    "Graph4": {
+    "Graph4 (2)": {
         "FileType": ".png",
         "Points" :(163*2+30, 178*2, 2810, 1780-8),
         "MidCoord": 1070 -1,
-        "StartingPoint": 1210 -4,
+        "StartingPoint": 163*2+61,
         "Colors": {
-            "r": (255, 40),
-            "g": (245, 40),
-            "b": (0, 20)
+            "r": (0, 20),
+            "g": (0, 20),
+            "b": (250, 10)
         },
         "scale": 6,
-        "integrate": (0,0,255),
+        "integrate": (255,0,0),
         "derivate": False,
         "maxDivisions": 1000
     },

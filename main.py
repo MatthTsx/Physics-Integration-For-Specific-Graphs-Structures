@@ -6,7 +6,7 @@ import math
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph4"
+fileName = "Graph4 (2)"
 
 fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions = Data[fileName].values()
 
@@ -104,7 +104,7 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
         
         
 ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10)
-getCoordinates()
+#getCoordinates()
 
 imageGraph.show()
 #imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)
