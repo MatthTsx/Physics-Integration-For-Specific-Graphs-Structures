@@ -16,7 +16,8 @@ Data = {
         "integrate": (0,0,255),
         "derivate": False,
         "maxDivisions": 600,
-        "derivateTarget": 20
+        "derivateTarget": 20,
+        "scalar": 10
     },
     "Graph1 (2)":{
         "FileType": ".png",
@@ -31,8 +32,9 @@ Data = {
         "scale": 3,
         "integrate": (255,0,0),
         "derivate": False,
-        "maxDivisions": 350,
-        "derivateTarget": 20
+        "maxDivisions": 375,
+        "derivateTarget": 20,
+        "scalar": 10
     },
     "Graph2": {
         "FileType": ".jpg",
@@ -48,7 +50,8 @@ Data = {
         "integrate": (255,0,0),
         "derivate": (0,0,0),
         "maxDivisions": 600,
-        "derivateTarget": 20
+        "derivateTarget": 20,
+        "scalar": 10
     },
     "Graph3": {
         "FileType": ".jpg",
@@ -64,7 +67,8 @@ Data = {
         "integrate": False,
         "derivate": (0,0,255),
         "maxDivisions": 400,
-        "derivateTarget": 50
+        "derivateTarget": 50,
+        "scalar": 5
     },
     "Graph4": {
         "FileType": ".png",
@@ -80,7 +84,8 @@ Data = {
         "integrate": (0,0,255),
         "derivate": False,
         "maxDivisions": 1000,
-        "derivateTarget": 20
+        "derivateTarget": 20,
+        "scalar": 10
     },
     "Graph4 (2)": {
         "FileType": ".png",
@@ -96,6 +101,7 @@ Data = {
         "integrate": (255,0,0),
         "derivate": False,
         "maxDivisions": 1000,
-        "derivateTarget": 20
+        "derivateTarget": 20,
+        "scalar": 10
     },
 }

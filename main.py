@@ -2,13 +2,24 @@ from PIL import Image
 import os
 from storedData import Data
 import math
+import moviepy as mv
+import numpy as np
+from time import sleep
+
+ImagesArray = []
 
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph2"
+fileName = "Graph3"
+GenerateVideo = {
+    "FileName": "sla",
+    "Genarate": True,
+    "DerivateLines": False,
+    "IntegralDivisions": True
+}
 
-fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions, derivateTarget = Data[fileName].values()
+fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions, derivateTarget, scalar = Data[fileName].values()
 
 
 imageGraph = Image.open(root + "/ImagesBase/" + fileName + fileType)
@@ -17,7 +28,12 @@ iwidth, iheight = imageGraph.size
 divisions = maxDivisions
 
 newImage = imageGraph.copy()
+# resizeRatio = 1/4
+# newImage.resize((math.floor(iwidth*resizeRatio), iheight*resizeRatio), Image.Resampling.LANCZOS)
 
+
+# def putpixel(tuple = (0,0), color = (0,0,0)):
+#     newImage.putpixel((tuple[0]/4))
 
 def getCoordinates():
     mult = 10
@@ -38,6 +54,7 @@ print(imageGraph.size)
 def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickness = -1, Debug = False, LinesThick = 4, divisions=divisions):
     ant_Ipoint = startingPoint
     ant_y = "undefined"
+    derivatePixels = []
     
     for i in range(coords[0], coords[2]+1, int(math.floor((coords[2]-coords[0])/divisions)) ):
         y = 0
@@ -70,6 +87,9 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
             for j in range(1, abs(zero - y)):
                 for k in range(-thickness, max(thickness, 1)):
                     newImage.putpixel((i+k,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
+                    
+            if GenerateVideo["IntegralDivisions"] and GenerateVideo["Genarate"]:
+                ImagesArray.append(np.asarray(newImage))
     
     
         y = zero - y
@@ -81,11 +101,12 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
         
         if derivate:
             ratio = (y-ant_y)/height
+            derivatePixels.append((i, ratio *-1 + zero))
             for k in range(-LinesThick*2, max(LinesThick*2, 1)):
                 for l in range(-LinesThick*2,max(LinesThick*2,1)):
                     if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick*2)): continue
                     print((i+k), int(math.floor(ant_Ipoint))+l)
-                    newImage.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), derivate)
+                    newImage.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), (155,155,155))
         
         if ant_y*y < 0:
             ant_y = 0
@@ -102,86 +123,72 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
                     newImage.putpixel((i+k, int(math.floor(ant_Ipoint))+l), integrate)
         
         ant_y = y
+    
+    if derivate:
+        derivatePoints = []
+        
+        for i in range(0,len(derivatePixels), scalar):
+            medianY = 0
+            counter_ = 0
+            for j in range(i, min(i + scalar, len(derivatePixels))):
+                medianY += derivatePixels[j][1]
+                counter_ += 1
+            medianY /= counter_
+            derivatePoints.append((
+                derivatePixels[min(int(math.floor(i + scalar/2)), len(derivatePixels)-1)][0],
+                (medianY)
+            ))
+        DrawGraph(derivatePoints)
+    
 
-def DerivateWithLinearDrawing(derivate = derivate, thickness = -1, Debug = False, LinesThick = 4, divisions=divisions):
+def DrawGraph(points = [()], LinesThick = 3):
     ant_Ipoint = "undefined"
-    ant_y = "undefined"
     ant_x = "undefined"
     
-    for i in range(coords[0], coords[2]+1, int(math.floor((coords[2]-coords[0])/divisions)) ):
-        y = 0
+    counter = 0
+    for i in points:
+        counter += 1
+        if ant_Ipoint == "undefined":
+            ant_Ipoint = i[1]
+            ant_x = i[0]
+            continue
+        
+        increaseFactor = (ant_Ipoint-i[1])/(ant_x-i[0])
         count = 0
-        for j in range(coords[1], coords[3]):
-            pixel = imageGraph.getpixel((i,j))
+        for w in range(0, i[0]-ant_x):
+            for k in range(-LinesThick, max(LinesThick, 1)):
+                for l in range(-LinesThick,max(LinesThick,1)):
+                    if imageGraph.getpixel((w+ant_x + k, math.floor(ant_Ipoint + increaseFactor*w) + l)) == derivate:
+                        continue
+                    newImage.putpixel( (w+ant_x + k, math.floor(ant_Ipoint + increaseFactor*w) + l), (
+                        derivate[0]-140, derivate[1]-140, derivate[2]-140
+                    ) )
+            count += 1
+            if(count < scalar): continue
+            count = 0
             
-            if (
-                abs(pixel[0] - targetColors["r"][0]) < targetColors["r"][1]
-                and abs(pixel[1] - targetColors["g"][0]) < targetColors["g"][1]
-                and abs(pixel[2] - targetColors["b"][0]) < targetColors["b"][1]
-            ):
-                y += j
-                count += 1
-                if Debug:
-                    for o in range (-thickness, max(thickness, 1)):
-                        for p in range (-thickness, max(thickness, 1)):
-                            newImage.putpixel((i+o,j+p), (100,255,100))
-        
-        if not count:
-            continue
-        
-        if Debug:
-            newImage.putpixel(
-                (i, int(math.floor(y/count))),
-                (255,0,0)
-            )
-        y = (y/count)
-        #y = math.floor(y)
-    
-    
-        y = zero - y
-        height = math.floor(abs(coords[0]-coords[2])/divisions)/(coords[2]-coords[0])*scale
-        
-        if ant_y == "undefined":
-            ant_y = math.floor(y)
-            ant_x = i
-            continue
-        
-        ratio = (y-ant_y)/height
-        ptarget = int(math.floor(ratio * -1 + zero))
-        if derivate and ant_Ipoint != "undefined":
-            increaseFactor = (ant_Ipoint-ptarget)/(ant_x-i)
-            print(ratio)
+            if GenerateVideo["Genarate"] and GenerateVideo["DerivateLines"]:
+                print("Loading", counter , "/", len(points))
+                ImagesArray.append(np.asarray(newImage))
+                sleep(.002)
             
-            for w in range(0, i-ant_x):
-                for k in range(-LinesThick, max(LinesThick, 1)):
-                    for l in range(-LinesThick,max(LinesThick,1)):
-                        if imageGraph.getpixel((w+ant_x + k, ant_Ipoint + math.floor(increaseFactor*w) + l)) == derivate:
-                            continue
-                        newImage.putpixel( (w+ant_x + k, ant_Ipoint + math.floor(increaseFactor*w) + l), (
-                            derivate[0]-140, derivate[1]-140, derivate[2]-140
-                        ) )
-            
-            for k in range(-LinesThick*4, max(LinesThick*4, 1)):
-                for l in range(-LinesThick*4,max(LinesThick*4,1)):
-                    if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick*4)): continue
-                    #print((i+k), int(math.floor(ant_Ipoint))+l)
-                    newImage.putpixel((i+k, ptarget+l), derivate)
         
-        if ant_y*y < 0:
-            ant_y = 0
-        ant_y = y
-        ant_x = i
-        ant_Ipoint = ptarget
-    
-        
+        ant_Ipoint = i[1]
+        ant_x = i[0]
+    pass
+
 
 #ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10, Debug=False, thickness=1)        
 
-if derivate:
-    DerivateWithLinearDrawing(divisions=Data[fileName]["derivateTarget"], LinesThick=3, Debug=False)
+# if derivate:
+#     DerivateWithLinearDrawing(divisions=Data[fileName]["derivateTarget"], LinesThick=3, Debug=False)
 ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10)
 
 #getCoordinates()
 
 newImage.show()
-#imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)
+
+if GenerateVideo["Genarate"]:
+    clip = mv.ImageSequenceClip(ImagesArray, fps=30)
+    clip.write_videofile(root + "/" + fileName + "-Video.mp4")
+#imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)mv.

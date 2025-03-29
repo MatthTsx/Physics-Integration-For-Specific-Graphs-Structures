@@ -1,17 +1,8 @@
-from pdf2image import convert_from_path
-import os
+array = []
 
-root = os.getcwd() + "/PdfsForConversion/"
-print(root)
+array[2] = 1
+array[10] = 20
+array[20] = 10
+array[1] = 0
 
-fileName = input("Pdf's File name: ")
-pages = convert_from_path(root + fileName + ".pdf")
-
-
-resultDir = root + fileName + "_JPGS/"
-if not os.path.exists(resultDir):
-    os.makedirs(resultDir)
-
-for i in range(len(pages)):
-    pages[i].save(resultDir + fileName + str(i) + ".jpg", 'JPEG')
-    print(i)
+print(array)
