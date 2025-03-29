@@ -51,7 +51,7 @@ Data = {
         "derivate": (0,0,0),
         "maxDivisions": 600,
         "derivateTarget": 20,
-        "scalar": 10
+        "scalar": 25
     },
     "Graph3": {
         "FileType": ".jpg",
@@ -66,9 +66,9 @@ Data = {
         "scale": 10,
         "integrate": False,
         "derivate": (0,0,255),
-        "maxDivisions": 400,
+        "maxDivisions": 300,
         "derivateTarget": 50,
-        "scalar": 5
+        "scalar": 10
     },
     "Graph4": {
         "FileType": ".png",

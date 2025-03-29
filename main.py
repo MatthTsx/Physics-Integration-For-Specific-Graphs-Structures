@@ -11,7 +11,7 @@ ImagesArray = []
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph3"
+fileName = "Graph2"
 GenerateVideo = {
     "FileName": "sla",
     "Genarate": True,
@@ -59,6 +59,9 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
     for i in range(coords[0], coords[2]+1, int(math.floor((coords[2]-coords[0])/divisions)) ):
         y = 0
         count = 0
+        if GenerateVideo["IntegralDivisions"] and GenerateVideo["Genarate"]:
+            ImagesArray.append(np.asarray(newImage))
+            
         for j in range(coords[1], coords[3]):
             pixel = imageGraph.getpixel((i,j))
             
@@ -88,8 +91,6 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
                 for k in range(-thickness, max(thickness, 1)):
                     newImage.putpixel((i+k,zero + j * int(abs(zero-y)/(zero-y)) * -1 ), (0,0,0))
                     
-            if GenerateVideo["IntegralDivisions"] and GenerateVideo["Genarate"]:
-                ImagesArray.append(np.asarray(newImage))
     
     
         y = zero - y
@@ -182,13 +183,13 @@ def DrawGraph(points = [()], LinesThick = 3):
 
 # if derivate:
 #     DerivateWithLinearDrawing(divisions=Data[fileName]["derivateTarget"], LinesThick=3, Debug=False)
-ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10)
+ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10, Debug=True, thickness=0)
 
 #getCoordinates()
 
 newImage.show()
 
 if GenerateVideo["Genarate"]:
-    clip = mv.ImageSequenceClip(ImagesArray, fps=30)
+    clip = mv.ImageSequenceClip(ImagesArray, fps=math.floor(30*divisions/300))
     clip.write_videofile(root + "/" + fileName + "-Video.mp4")
 #imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)mv.
