@@ -11,13 +11,16 @@ ImagesArray = []
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph2"
+fileName = "Graph3"
 GenerateVideo = {
     "FileName": "sla",
     "Genarate": True,
-    "DerivateLines": False,
+    "DerivateLines": True,
     "IntegralDivisions": True
 }
+
+Debug = True
+DebugDerivate = True
 
 fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions, derivateTarget, scalar = Data[fileName].values()
 
@@ -103,11 +106,12 @@ def ForEveryPixelIntegrateOrDerivate(integrate = False, derivate = False, thickn
         if derivate:
             ratio = (y-ant_y)/height
             derivatePixels.append((i, ratio *-1 + zero))
-            for k in range(-LinesThick*2, max(LinesThick*2, 1)):
-                for l in range(-LinesThick*2,max(LinesThick*2,1)):
-                    if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick*2)): continue
-                    print((i+k), int(math.floor(ant_Ipoint))+l)
-                    newImage.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), (155,155,155))
+            if DebugDerivate:
+                for k in range(-LinesThick*2, max(LinesThick*2, 1)):
+                    for l in range(-LinesThick*2,max(LinesThick*2,1)):
+                        if(pow(k,2) + pow(l,2) > 10 * math.log10(LinesThick*2)): continue
+                        print((i+k), int(math.floor(ant_Ipoint))+l)
+                        newImage.putpixel((i+k, int(math.floor(ratio *-1 + zero))+l), (155,155,155))
         
         if ant_y*y < 0:
             ant_y = 0
@@ -162,7 +166,7 @@ def DrawGraph(points = [()], LinesThick = 3):
                     if imageGraph.getpixel((w+ant_x + k, math.floor(ant_Ipoint + increaseFactor*w) + l)) == derivate:
                         continue
                     newImage.putpixel( (w+ant_x + k, math.floor(ant_Ipoint + increaseFactor*w) + l), (
-                        derivate[0]-140, derivate[1]-140, derivate[2]-140
+                        derivate[0], derivate[1], derivate[2]
                     ) )
             count += 1
             if(count < scalar): continue
@@ -183,9 +187,9 @@ def DrawGraph(points = [()], LinesThick = 3):
 
 # if derivate:
 #     DerivateWithLinearDrawing(divisions=Data[fileName]["derivateTarget"], LinesThick=3, Debug=False)
-ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10, Debug=True, thickness=0)
+ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesThick=10, Debug=Debug, thickness=0)
 
-#getCoordinates()
+# getCoordinates()
 
 newImage.show()
 

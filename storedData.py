@@ -70,6 +70,23 @@ Data = {
         "derivateTarget": 50,
         "scalar": 10
     },
+    "Graph3 (2)": {
+        "FileType": ".png",
+        "Points" :(163*2+63, 178*2, 2810, 1780-8),
+        "MidCoord": 1300-6,
+        "StartingPoint": 178*2,
+        "Colors": {
+            "r": (0, 30),
+            "g": (0, 30),
+            "b": (255, 40)
+        },
+        "scale": 10,
+        "integrate": False,
+        "derivate": (0,255,255),
+        "maxDivisions": 500,
+        "derivateTarget": 50,
+        "scalar": 25
+    },
     "Graph4": {
         "FileType": ".png",
         "Points" :(163*2+30, 178*2, 2810, 1780-8),
