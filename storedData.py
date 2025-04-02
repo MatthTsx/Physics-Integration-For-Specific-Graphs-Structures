@@ -121,4 +121,38 @@ Data = {
         "derivateTarget": 20,
         "scalar": 10
     },
+    "TG1": {
+        "FileType": ".PNG",
+        "Points" :(0, 0, int(8160/4)- 200, int(4592/4) - 200),
+        "MidCoord": 349,
+        "StartingPoint": 0,
+        "Colors": {
+            "r": (255, 60),
+            "g": (0, 40),
+            "b": (0, 40)
+        },
+        "scale": 9,
+        "integrate": False,
+        "derivate": (0, 0, 255),
+        "maxDivisions": 200,
+        "derivateTarget": 20,
+        "scalar": 10
+    },
+    "TG1 (1)": {
+        "FileType": ".PNG",
+        "Points" :(0, 0, int(8160/4)- 200, int(4592/4) - 200),
+        "MidCoord": 349,
+        "StartingPoint": 0,
+        "Colors": {
+            "r": (0, 40),
+            "g": (0, 40),
+            "b": (255, 60)
+        },
+        "scale": 9,
+        "integrate": False,
+        "derivate": (0, 0, 0),
+        "maxDivisions": 100,
+        "derivateTarget": 20,
+        "scalar": 5
+    },
 }

@@ -11,16 +11,16 @@ ImagesArray = []
 root = os.getcwd()
 
 # fileName = input("File name: ")
-fileName = "Graph3"
+fileName = "TG1 (1)"
 GenerateVideo = {
     "FileName": "sla",
-    "Genarate": True,
+    "Genarate": False,
     "DerivateLines": True,
     "IntegralDivisions": True
 }
 
-Debug = True
-DebugDerivate = True
+Debug = False
+DebugDerivate = False
 
 fileType, coords, zero, startingPoint, targetColors, scale, integrate, derivate, maxDivisions, derivateTarget, scalar = Data[fileName].values()
 
@@ -175,7 +175,6 @@ def DrawGraph(points = [()], LinesThick = 3):
             if GenerateVideo["Genarate"] and GenerateVideo["DerivateLines"]:
                 print("Loading", counter , "/", len(points))
                 ImagesArray.append(np.asarray(newImage))
-                sleep(.002)
             
         
         ant_Ipoint = i[1]
@@ -194,6 +193,6 @@ ForEveryPixelIntegrateOrDerivate(integrate=integrate, derivate=derivate, LinesTh
 newImage.show()
 
 if GenerateVideo["Genarate"]:
-    clip = mv.ImageSequenceClip(ImagesArray, fps=math.floor(30*divisions/300))
+    clip = mv.ImageSequenceClip(ImagesArray, fps=math.floor(30*divisions/45))
     clip.write_videofile(root + "/" + fileName + "-Video.mp4")
 #imageGraph.save(root + "/ImagesBase/" + fileName + " (2)" + fileType)mv.
